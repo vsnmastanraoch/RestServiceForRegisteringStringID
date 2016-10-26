@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
 
-import org.inno.vo.ReturnObject;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -27,30 +26,30 @@ public class TestRestService extends JerseyTest {
 	public void testStringInsertSuccess() throws IOException,
 			URISyntaxException {
 		WebResource webResource = client().resource("http://localhost:8080/");
-		ReturnObject returnObject = webResource.path("/register/rest/service/albert")
-				.post(ReturnObject.class);
-		assertEquals("1152", returnObject.getStringId());
+		Integer returnObject = webResource.path("/register/rest/service/albert")
+				.post(Integer.class);
+		assertEquals("1152", Integer.toString(returnObject));
 	}
  
 	@Test(expected = UniformInterfaceException.class)
 	public void testStringInsertDuplicate() {
 		WebResource webResource = client().resource("http://localhost:8080/");
-		ReturnObject returnObject = webResource.path("/register/rest/service/albert")
-				.post(ReturnObject.class);
+		Integer returnObject = webResource.path("/register/rest/service/albert")
+				.post(Integer.class);
 	}
 
 	@Test(expected = UniformInterfaceException.class)
 	public void testStringWrongInsertFailure() {
 		WebResource webResource = client().resource("http://localhost:8080/");
-		ReturnObject returnObject = webResource.path("/register/rest/service/albert")
-				.post(ReturnObject.class);
+		Integer returnObject = webResource.path("/register/rest/service/albert")
+				.post(Integer.class);
 	}
 
 	@Test(expected = UniformInterfaceException.class)
 	public void testFetchListWithStringID() {
 		WebResource webResource = client().resource("http://localhost:8080/");
-		List<ReturnObject> returnObject = webResource.path("/register/rest/service/albert")
-				.get(new GenericType<List<ReturnObject>>(){});
+		List<String> returnObject = webResource.path("/register/rest/service/albert")
+				.get(new GenericType<List<String>>(){});
 		Assert.assertNotNull(returnObject);
 	}
 

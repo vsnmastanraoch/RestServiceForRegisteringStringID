@@ -2,19 +2,17 @@ package org.inno.vo;
 
 import java.io.Serializable;
 
-import javax.xml.bind.annotation.XmlRootElement;
+public class RequestObject implements Serializable {
 
-@XmlRootElement
-public class ReturnObject implements Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1584831497641354012L;
-	
-	private int stringId;
+	private static final long serialVersionUID = -4724790447966237332L;
 
-	private String stringValue;
+	private int stringId;
 	
+	private String stringValue;
+
 	public int getStringId() {
 		return stringId;
 	}
@@ -30,6 +28,4 @@ public class ReturnObject implements Serializable {
 	public void setStringValue(String stringValue) {
 		this.stringValue = stringValue;
 	}
-
-	
 }

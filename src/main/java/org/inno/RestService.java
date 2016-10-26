@@ -9,13 +9,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
-import org.inno.vo.ReturnObject;
+import org.inno.vo.RequestObject;
 
 @Path("/service")
 public class RestService {
@@ -34,18 +36,13 @@ public class RestService {
 	 * @return - Registered Value.
 	 */
 	@POST
-	@Path("{registerId}")
-	@Produces("application/json")
-	public ReturnObject registerUnicode(
-			@PathParam(value = "registerId") String registerId) {
-		writeIntoFile(registerId);
-		ReturnObject returnObject = new ReturnObject();
-		returnObject.setStringId(getUnicodeCount(registerId));
-		return returnObject;
-	}
-
-	public static void main(String args[]) {
-		System.out.println(getUnicodeCount("albert"));
+	@Consumes({MediaType.APPLICATION_JSON})
+	@Produces({MediaType.APPLICATION_JSON})
+	public RequestObject registerUnicode(
+			RequestObject requestObject) {
+		writeIntoFile(requestObject.getStringValue());
+		requestObject.setStringId(getUnicodeCount(requestObject.getStringValue()));
+		return requestObject;
 	}
 	
 	/**
@@ -64,7 +61,7 @@ public class RestService {
 				scanner = new Scanner(file);
 				while (scanner.hasNextLine()) {
 					if (scanner.nextLine().contains(registerId)) {
-						throw new Exception("Name already exists");
+						return false;
 					}
 				}
 				scanner.close();
@@ -135,8 +132,8 @@ public class RestService {
 	@GET
 	@Path("{stringId}")
 	@Produces("application/json")
-	public List<ReturnObject> getRegisteredStrings(
-			@PathParam(value = "stringId") int stringId) {
+	public List<RequestObject> getRegisteredStrings(
+			@PathParam(value = "stringId") Integer stringId) {
 		return checkAndGetTheString(stringId);
 	}
 	
@@ -147,10 +144,10 @@ public class RestService {
 	 * @param stringId
 	 * @return
 	 */
-	private List<ReturnObject> checkAndGetTheString(int stringId) {
+	private List<RequestObject> checkAndGetTheString(int stringId) {
 		File file = new File(FILE_NAME);
-		List<ReturnObject> listOfRegisterId = new ArrayList<ReturnObject>();
-		ReturnObject returnObject = null;
+		List<RequestObject> listOfRegisterId = new ArrayList<RequestObject>();
+		RequestObject requestObject = null;
 		String checkingString = null;
 		try {
 			if (!file.exists()) {
@@ -158,9 +155,9 @@ public class RestService {
 				while (scanner.hasNextLine()) {
 					checkingString = scanner.nextLine();
 					if (stringId == getUnicodeCount(checkingString)) {
-						returnObject = new ReturnObject();
-						returnObject.setStringValue(checkingString);
-						listOfRegisterId.add(returnObject);
+						requestObject = new RequestObject();
+						requestObject.setStringValue(checkingString);
+						listOfRegisterId.add(requestObject);
 					}
 				}
 				scanner.close();
